@@ -1,0 +1,24 @@
+﻿@model IEnumerable<EFLinq.Models.CustomerProducts>
+
+@{
+    ViewBag.Title = "ListOfProductOrderAgainstCustomer";
+}
+
+<h2>ListOfProductOrderAgainstCustomer</h2>
+<table class="table">
+    <tr>
+        <th>Customer Name</th>
+        <th>POID</th>
+        <th>Product Name</th>
+        <th>Price</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CustomerName.CustomerName</td>
+            <td>@item.POID.POID</td>
+            <td>@item.ProductName.ProductName</td>
+            <td>@item.Price.Price</td>
+        </tr>
+}
+</table>

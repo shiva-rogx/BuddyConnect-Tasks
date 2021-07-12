@@ -1,0 +1,24 @@
+﻿@model IEnumerable<EFLinq.Models.MonthWiseProductSales>
+
+@{
+    ViewBag.Title = "ProductSalesReportMonthWise";
+}
+
+<h2>ProductSalesReportMonthWise</h2>
+
+<table class="table">
+    <tr>
+        <th>Month</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.DateOfPurchase.ToString("MMMM")-@item.DateOfPurchase.Year</td>
+            <td>@item.ProductName.ProductName</td>
+
+            <td>@item.Quantity.Quantity</td>
+        </tr>
+}
+</table>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Card Game</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Open+Sans:300" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+  <style>
+    body {
+    margin: 0;
+    color: #4d4d4d;
+    font-family: Open Sans, sans-serif;
+    letter-spacing: 1px;
+    font-weight: 300;
+    font-size: 15px;
+  }
+  
+  h1 {
+    color: white;
+    font-family: Comfortaa, cursive;
+    letter-spacing: 3px;
+    font-size: 42px;
+    text-align: center;
+    margin: 0;
+  }
+  
+  h2 {
+    font-size: 80px;
+    margin: 5px 0 0;
+  }
+  
+  h3 {
+    font-size: 28px;
+    font-weight: 300;
+    margin: 0;
+  }
+  
+  p {
+    margin: 0;
+  }
+  
+  a {
+    color: inherit;
+  }
+  
+  header {
+    background-color: skyblue;
+    padding: 0px 8px 0px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #new-game-button {
+    text-decoration: none;
+    color: white;
+    margin-top: 40px;
+    padding: 12px 15px;
+    border: 1px solid;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px white;
+  }
+  
+  #new-game-button:hover {
+    background-color: white;
+    color: skyblue;
+    margin-top: 40px;
+    padding: 12px 15px;
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px white;
+  }
+  
+  #game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 8px 30px;
+  }
+  
+  #game-container.hidden {
+    display: none;
+  }
+  
+  #game {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    perspective: 800px;
+  }
+  
+  .game-card {
+    height: 180px;
+    width: 180px;
+    margin: 5px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .65s;
+    box-shadow: 0px 2px 4px gray;
+  }
+  
+  .game-card figure {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+  
+  .game-card .front {
+    background-color: rebeccapurple;
+  }
+  
+  .game-card .back {
+    background-color: skyblue;
+    transform: rotateY(180deg);
+  }
+  
+  @media (max-width: 800px) {
+    .game-card {
+      height: 150px;
+      width: 150px;
+    }
+  }
+  
+  .game-card.flipped {
+    transform: rotateY(180deg);
+  }
+  
+  #score-board {
+    margin: 30px 0 0;
+    display: flex;
+  }
+  
+  .score {
+    display: inline-block;
+    padding: 0 20px 0;
+  }
+  
+  #score-board.hidden {
+    visibility: hidden;
+  }
+  
+  #win-screen {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: rgba(230,230,250, 0.95);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  #win-screen>* {
+    line-height: 0;
+    margin: 25px;
+  }
+  
+  #win-screen.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.8s;
+  }
+  
+  #replay-button {
+    cursor: pointer;
+    padding: 15px;
+    margin: 10px;
+    background-color: #f0f0ff;
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px white;
+  }
+  
+  #replay-button:hover {
+    background-color: #f8f8ff;
+    border: 1px solid white;
+    box-shadow: 0px 0px 5px 1px white;
+  }
+  
+  em {
+    font-size: 14px;
+  }
+  
+  footer {
+    background-color: skyblue;
+    font-size: 13px;
+    padding: 12px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  
+  footer.hidden {
+    display: none;
+  }
+  
+  footer a:hover {
+    color: #808080;
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Card Game</h1>
+    <br><br><br>
+    <p>Softura Jquery Task</p>
+    <br><p>By Shiva M C</p>
+    <a href="#game-container" id="new-game-button">New Game</a>
+  </header>
+  <section id="game-container" class="hidden">
+    <section id="game">
+      <div id="game-card-1" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-2" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-3" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-4" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-5" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-6" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-7" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-8" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-9" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-10" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-11" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+      <div id="game-card-12" class="game-card">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+      </div>
+    </section>
+    <section id="score-board" class="">
+      <div class="score low-score">Low Score: N/A</div>
+      <div class="score click-count">Total Clicks: 0</div>
+    </section>
+    <div id="win-screen" class="">
+      <div class="score click-count">Total Clicks: 0</div>
+      <div class="score low-score">Low Score:</div>
+      <a id="replay-button">Play Again</a>
+    </div>
+  </section>
+  <script>
+    var possibleCardFaces = ["&#x02160;", "&#x02161;", "&#x02162;", "&#x02163;", "&#x02164;", "&#x02165;", 
+"&#x02160;", "&#x02161;", "&#x02162;", "&#x02163;", "&#x02164;", "&#x02165;"];
+var lowScore = localStorage.getItem("lowScore");
+var score = 0;
+var flippedCards = [];
+var matchedCards = [];
+var locked = false;
+var flipTimeout = 700;
+
+function assignLowScore($lowScoreOutput) {
+  lowScore = lowScore || "N/A";
+  $lowScoreOutput.text("Low Score: " + lowScore);
+}
+
+function getRandomIndex(length) {
+  return Math.floor(Math.random() * length);
+}
+
+function getRandomFace(randomIndex) {
+  var face;
+  randomIndex = getRandomIndex(possibleCardFaces.length);
+  face = possibleCardFaces[randomIndex];
+  possibleCardFaces.splice(randomIndex, 1);
+  return face;
+}
+
+function assignCardFaces($cardFaces) {
+  for (var i = 0; i < 12; i++) {
+    $($cardFaces[i]).html("<h2>" + getRandomFace() + "</h2>");
+  }
+  possibleCardFaces = ["&#x02160;", "&#x02161;", "&#x02162;", "&#x02163;", "&#x02164;", "&#x02165;", 
+"&#x02160;", "&#x02161;", "&#x02162;", "&#x02163;", "&#x02164;", "&#x02165;"];
+}
+
+function isNotFlipped($card) {
+  return !$card.hasClass("flipped");
+}
+
+function areMatching(flippedCards) {
+  return (flippedCards[0].html() === flippedCards[1].html());
+}
+
+function hideCards(flippedCards) {
+  setTimeout(function() {
+    $(flippedCards[0]).removeClass("flipped");
+    $(flippedCards[1]).removeClass("flipped");
+    locked = false;
+  }, flipTimeout);
+}
+
+function hideScoreBoard($scoreBoard) {
+  $scoreBoard.addClass("hidden");
+}
+
+function checkForLowScore(score, $lowScoreOutput) {
+  if (lowScore === "N/A") {
+    lowScore = Infinity;
+  }
+  if (score < lowScore) {
+    localStorage.setItem("lowScore", score);
+    lowScore = localStorage.getItem("lowScore");
+    $lowScoreOutput.html("<em>*new*</em> Low Score: " + score);
+  }
+}
+
+function renderWinScreen($winScreen) {
+  setTimeout(function() {
+    $winScreen.addClass("visible");
+  }, 400);
+}
+
+function reset($lowScoreOutput, $cardFaces, $gameClicks, $gameCardElements, $winScreen, $scoreBoard) {
+  assignCardFaces($cardFaces);
+  matchedCards = [];
+  score = 0;
+  $lowScoreOutput.text("Low Score: " + lowScore);
+  $gameClicks.text("Total Clicks: " + score);
+  $winScreen.removeClass("visible");
+  $scoreBoard.removeClass("hidden");
+  $gameCardElements.removeClass("flipped");
+}
+
+$(document).ready(function(){
+  var $newGameButton = $("#new-game-button");
+  var $gameContainer = $("#game-container");
+  var $gameCardElements = $(".game-card");
+  var $cardFaces = $(".game-card .back");
+  var $scoreBoard = $("#score-board");
+  var $gameClicks = $(".click-count");
+  var $lowScoreOutput = $(".low-score");
+  var $winScreen = $("#win-screen");
+  var $replay = $("#replay-button");
+  var $footer = $("footer");
+
+  assignLowScore($lowScoreOutput);
+  assignCardFaces($cardFaces);
+
+  $newGameButton.on("click", function() {
+    $gameContainer.removeClass("hidden");
+    $footer.removeClass("hidden");
+  });
+
+  $gameContainer.on("click", ".front, .front h2", function(event) {
+    if(event.target != this || locked){ return true; }
+
+    // in case I decide to put a figure on front of card
+    var $card = $(event.target).closest(".game-card");
+
+    if (isNotFlipped($card)) {
+      $card.addClass("flipped");
+      flippedCards.push($card);
+      score++;
+      $gameClicks.text("Total Clicks: " + score);
+    }
+
+    if (flippedCards.length === 2) {
+      if (areMatching(flippedCards)) {
+        matchedCards.push(flippedCards[0], flippedCards[1]);
+      } else {
+        locked = true;
+        hideCards(flippedCards);
+      }
+      flippedCards = [];
+    }
+
+    if(matchedCards.length === $gameCardElements.length) {
+      checkForLowScore(score, $lowScoreOutput);
+      hideScoreBoard($scoreBoard);
+      renderWinScreen($winScreen);
+    }
+  });
+
+  $replay.on("click", function() {
+    reset($lowScoreOutput, $cardFaces, $gameClicks, $gameCardElements, $winScreen, $scoreBoard);
+  });
+
+  // Smooth Scrolling
+  $("a").on('click', function(event) {
+    if (this.hash !== "") {
+      event.preventDefault();
+      var hash = this.hash;
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+        }, 600);
+    }
+  });
+})
+    </script>
+</body>
+</html>

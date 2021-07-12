@@ -1,0 +1,36 @@
+﻿
+@{ ViewBag.Title = "Home"; }
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h2>PRODUCT DETAILS</h2>
+            <center>
+                <br /><br />
+                @*<input type="button" value="1. List of Purchase order against customer" class="form-control" onclick="@("window.location.href='" + @Url.Action("ListOfPurchaseOrderAgainstCustomer", "Inventory") + "'");" />
+                    <br />
+                    <input type="button" value="2. MonthWise Customer Report With Products" class="form-control" onclick="@("window.location.href='" + @Url.Action("MonthWiseCustomerReportWithProducts", "Inventory") + "'");" />
+                    <br />
+                    <input type="button" value="3. Product Sales Report MonthWise" class="form-control" onclick="@("window.location.href='" + @Url.Action("ProductSalesReportMonthWise", "Inventory") + "'");" />
+                    <br />
+                    <input type="button" value="4. Maximum Order Price MonthWise" class="form-control" onclick="@("window.location.href='" + @Url.Action("MaximumOrderPriceMonthWise", "Inventory") + "'");" />*@
+                <table class="table">
+                    <tr>
+                        <th>@Html.ActionLink("1. List of Purchase order against customer", "ListOfPurchaseOrderAgainstCustomer")</th>
+                    </tr>
+                    <tr>
+                        <th>@Html.ActionLink("2. MonthWise Customer Report With Products", "MonthWiseCustomerReportWithProducts")</th>
+                    </tr>
+                    <tr>
+                        <th> @Html.ActionLink("3. Product Sales Report MonthWise", "ProductSalesReportMonthWise")</th>
+                    </tr>
+                    <tr>
+                        <th> @Html.ActionLink("4. Maximum Order Price MonthWise", "MaximumOrderPriceMonthWise")</th>
+                    </tr>
+                </table>
+            </center>
+        </div>
+    </div>
+
+</body>
+
